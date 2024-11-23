@@ -1,0 +1,29 @@
+// Definição dos pinos e variáveis
+#define potPin 0     // Pino analógico para o potenciômetro
+#define ledPin 6     // Pino PWM para o LED compartilhado
+#define buttonPin 2  // Pino digital para o botão
+
+int valPot = 0;      // Variável para armazenar o valor do potenciômetro
+bool ledState = LOW; // Estado atual do LED (ligado ou desligado)
+
+void setup() {
+  pinMode(ledPin, OUTPUT);    // Configura o LED como saída
+  pinMode(buttonPin, INPUT);  // Configura o botão como entrada
+}
+
+void loop() {
+  // Verifica o estado do botão
+  if (digitalRead(buttonPin) == HIGH) {   // Se o botão está pressionado
+    ledState = !ledState;                 // Alterna o estado do LED
+    delay(300);                           // Pequeno atraso para evitar "rebotes"
+  }
+
+  // Se o LED estiver ligado, controla o brilho pelo potenciômetro
+  if (ledState) {
+    valPot = analogRead(potPin);          // Lê o valor do potenciômetro
+    valPot = map(valPot, 0, 1023, 0, 255); // Converte para escala de 0-255
+    analogWrite(ledPin, valPot);          // Ajusta o brilho do LED
+  } else {
+    analogWrite(ledPin, 0);               // Desliga o LED
+  }
+}
